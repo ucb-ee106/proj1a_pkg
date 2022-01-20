@@ -73,7 +73,7 @@ class JointVelocityController(Controller):
 
     def step_control(self, target_position, target_velocity, target_acceleration):
         """
-        Computes joint joint velocities to execute given end effector body velocity
+        Computes joint velocities to execute given end effector body velocity
 
         Parameters
         ----------
