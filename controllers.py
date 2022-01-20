@@ -43,7 +43,7 @@ class Controller:
         pass
 
 
-class JointIKController(Controller):
+class JointVelocityController(Controller):
 
     def __init__(self, sim=None):
         super().__init__(sim)
@@ -66,7 +66,7 @@ class JointIKController(Controller):
         """
         return target_velocity
 
-class JointVelocityController(Controller):
+class WorkspaceVelocityController(Controller):
 
     def __init__(self, sim=None):
         super().__init__(sim)

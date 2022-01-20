@@ -5,7 +5,7 @@ import matplotlib.pyplot as plt
 import pyglet
 from pyglet import shapes
 from trajectories import LinearTrajectory, CircularTrajectory, PolygonalTrajectory
-from controllers import JointIKController, JointVelocityController, JointTorqueController
+from controllers import JointVelocityController, JointTorqueController, WorkspaceVelocityController
 import colorsys
 import argparse
 
@@ -188,7 +188,7 @@ class SimpleArmSim(pyglet.window.Window):
     def update_kinematic(self):
         """For controllers that require a kinematic (instantaneous velocity change) model"""
 
-        if isinstance(controller, JointIKController):
+        if isinstance(controller, JointVelocityController):
             # Get current desired joint angle velocity
             index = int(self.time // self.dt)
             safe_index = lambda i: max(min(i, len(self.joint_velocity_sols) - 1), 0)
@@ -196,7 +196,7 @@ class SimpleArmSim(pyglet.window.Window):
             joint_velocity = controller.step_control(None, target_velocity, None)
             self.q_dot = joint_velocity
         
-        elif isinstance(controller, JointVelocityController):
+        elif isinstance(controller, WorkspaceVelocityController):
             # Get current desired end effector velocity
             target_velocity = trajectory.target_velocity(self.time)[:2] # We only need xy
             joint_velocity = controller.step_control(None, target_velocity, None)
@@ -256,7 +256,7 @@ if __name__ == "__main__":
         'Options: line, circle, polygon.  Default: line'
     )
     parser.add_argument('-controller_name', '-c', type=str, default='jointspace', 
-        help='Options: jointspace_ik, jointspace, or torque.  Default: jointspace'
+        help='Options: jointspace, workspace, or torque.  Default: jointspace'
     )
     args = parser.parse_args()
 
@@ -268,17 +268,17 @@ if __name__ == "__main__":
 
     sim = SimpleArmSim(width, height)
 
-    if args.controller_name == 'jointspace_ik':
-        controller = JointIKController(sim)
     if args.controller_name == 'jointspace':
         controller = JointVelocityController(sim)
+    if args.controller_name == 'workspace':
+        controller = WorkspaceVelocityController(sim)
     elif args.controller_name == 'torque':
         controller = JointTorqueController(sim)
 
     if trajectory and controller:
-        if args.controller_name == 'jointspace_ik':
-            update_func = sim.update_kinematic
         if args.controller_name == 'jointspace':
+            update_func = sim.update_kinematic
+        if args.controller_name == 'workspace':
             update_func = sim.update_kinematic
         elif args.controller_name == 'torque':
             update_func = sim.update_dynamic
