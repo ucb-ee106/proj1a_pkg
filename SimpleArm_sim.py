@@ -256,7 +256,7 @@ if __name__ == "__main__":
         'Options: line, circle, polygon.  Default: line'
     )
     parser.add_argument('-controller_name', '-c', type=str, default='jointspace', 
-        help='Options: jointspace, workspace, or torque.  Default: jointspace'
+        help='Options: jointspace_ik, jointspace, or torque.  Default: jointspace'
     )
     args = parser.parse_args()
 
