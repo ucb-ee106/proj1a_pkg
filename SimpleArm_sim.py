@@ -40,10 +40,10 @@ class SimpleArmSim(pyglet.window.Window):
         constants = [self.l1, self.l2, m1, m2, I1, I2, g]
 
         # Setup condensed functions for getting important matrices
-        self.M_func = lambda q, q_dot: SimpleArm_dynamics.M_func(*(constants + [self.q, self.q_dot]))
-        self.C_func = lambda q, q_dot: SimpleArm_dynamics.C_func(*(constants + [self.q, self.q_dot]))
-        self.G_func = lambda q, q_dot: SimpleArm_dynamics.G_func(*(constants + [self.q, self.q_dot]))
-        self.J_body_func = lambda q, q_dot: SimpleArm_dynamics.J_body_func(*(constants + [self.q, self.q_dot]))
+        self.M_func = lambda q, q_dot: SimpleArm_dynamics.M_func(*(constants + [q, q_dot]))
+        self.C_func = lambda q, q_dot: SimpleArm_dynamics.C_func(*(constants + [q, q_dot]))
+        self.G_func = lambda q, q_dot: SimpleArm_dynamics.G_func(*(constants + [q, q_dot]))
+        self.J_body_func = lambda q, q_dot: SimpleArm_dynamics.J_body_func(*(constants + [q, q_dot]))
 
         # Other simulation constants
         self.dt = 1/60
